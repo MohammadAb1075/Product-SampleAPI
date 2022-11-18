@@ -11,8 +11,13 @@ namespace SampleAPI
 {
     public class Program
     {
+        //public static IConfiguration Configuration;
         public static void Main(string[] args)
         {
+            //var builder = new ConfigurationBuilder()
+            //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            //Configuration = builder.Build();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -23,4 +28,8 @@ namespace SampleAPI
                     webBuilder.UseStartup<Startup>();
                 });
     }
+    //public class AppSettings
+    //{
+    //    public string ConnectionString { get; set; }
+    //}
 }

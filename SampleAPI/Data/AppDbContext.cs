@@ -4,6 +4,7 @@ using SampleAPI.Models.Config;
 using Microsoft.Extensions.Configuration;
 using static SampleAPI.Program;
 using SampleAPI.Data.Config;
+using System;
 
 namespace SampleAPI.Data
 {
@@ -21,11 +22,24 @@ namespace SampleAPI.Data
             //}
             //base.OnConfiguring(optionsBuilder);
 
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("data source=.;initial catalog=DbSampleAPI;integrated security=True;multipleactiveresultsets=True;application name=DbSampleAPI");
+            //}
+            //base.OnConfiguring(optionsBuilder);
+
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("data source=.;initial catalog=DbSampleAPI;integrated security=True;multipleactiveresultsets=True;application name=DbSampleAPI");
+
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("AppSettings"));
             }
             base.OnConfiguring(optionsBuilder);
+
+
 
         }
 
