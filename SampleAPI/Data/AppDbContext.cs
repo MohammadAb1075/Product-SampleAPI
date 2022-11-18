@@ -38,9 +38,6 @@ namespace SampleAPI.Data
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("AppSettings"));
             }
             base.OnConfiguring(optionsBuilder);
-
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
