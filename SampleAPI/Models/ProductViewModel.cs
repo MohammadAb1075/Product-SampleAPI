@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SampleAPI.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace SampleAPI.Models
 {
