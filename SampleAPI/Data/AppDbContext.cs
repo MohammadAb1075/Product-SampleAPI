@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SampleAPI.Data.Config;
-using SampleAPI.Models;
+using SampleAPI.Entities;
 using SampleAPI.Models.Config;
 using System;
 

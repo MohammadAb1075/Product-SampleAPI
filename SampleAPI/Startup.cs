@@ -44,6 +44,7 @@ namespace SampleAPI
 
             services.AddDbContext<AppDbContext>();
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<AppDbContext, AppDbContext>();
 
             //var builder = new ConfigurationBuilder()
             //                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);

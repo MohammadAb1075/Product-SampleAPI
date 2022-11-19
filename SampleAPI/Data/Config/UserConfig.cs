@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SampleAPI.Models;
+using SampleAPI.Entities;
+using System;
 
 namespace SampleAPI.Data.Config
 {
@@ -11,6 +12,9 @@ namespace SampleAPI.Data.Config
             builder.Property(e => e.Id)
                         .IsRequired()
                         .ValueGeneratedNever();
+            builder.Property(e => e.Id)
+                                .HasDefaultValueSql("NewId()");
+                                ;
             builder.Property(e => e.Username)
                                 .IsRequired()
                                 .HasMaxLength(256);
