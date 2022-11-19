@@ -3,21 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using SampleAPI.Data;
 using SampleAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.Swagger;
-using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.SwaggerGen;
-using NSwag.Generation.Processors.Security;
-using NSwag;
-using OpenApiSecurityScheme = NSwag.OpenApiSecurityScheme;
-using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace SampleAPI
 {
@@ -33,22 +21,9 @@ namespace SampleAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SampleAPI", Version = "v1" });
-            //    c.DescribeAllEnumsAsStrings();
-            //    c.DescribeAllParametersInCamelCase();
-            //});
-
-            //services.AddSwaggerGen();
-            //services.ConfigureSwaggerGen(options =>
-            //{
-            //    options.SwaggerDoc("v1", new OpenApiInfo { Title = "SampleAPI", Version = "v1" });
-            //    options.DescribeAllEnumsAsStrings();
-            //});
-
+            services.AddControllers()
+                    .AddJsonOptions(options =>
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             //services.AddSwaggerDocument();
 
