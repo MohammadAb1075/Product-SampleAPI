@@ -88,7 +88,7 @@ namespace SampleAPI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Information Is Not True");
+                return BadRequest("Model Is Not Valid");
             }
             await db.CreateAsync<Product>(new Product {Title = model.Title, Price = model.Price, Color = model.Color, Type = model.Type});
             return Ok();
@@ -105,27 +105,21 @@ namespace SampleAPI.Controllers
         //    return Ok();
         //}
 
-        [HttpPut()]
-        public async Task<IActionResult> Edit(string id, [FromBody] Product model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit([FromBody] Product model)
         {
-            var entity = await db.GetByIdAsync<Product>(id);
-            if (entity == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound("There Isn't Any Product Whit This Id");
+                return BadRequest("Model Is Not Valid");
             }
             await db.UpdateAsync<Product>(model);
             //await db.UpdateAsync<Product>(new Product {Id = id, Title = model.Title, Price = model.Price, Color = model.Color, Type = model.Type});
             return Ok();
         }
 
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest("Information Is Not True");
-            //}
             await db.DeleteAsync<Product>(id);
             return Ok();
         }
