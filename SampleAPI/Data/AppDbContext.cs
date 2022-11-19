@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SampleAPI.Data.Config;
 using SampleAPI.Models;
 using SampleAPI.Models.Config;
-using Microsoft.Extensions.Configuration;
-using static SampleAPI.Program;
-using SampleAPI.Data.Config;
 using System;
 
 namespace SampleAPI.Data
@@ -30,7 +29,6 @@ namespace SampleAPI.Data
 
             if (!optionsBuilder.IsConfigured)
             {
-
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                     .AddJsonFile("appsettings.json")

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SampleAPI.Data;
 
 namespace SampleAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221119121335_ChangePIdType")]
+    partial class ChangePIdType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,9 +24,8 @@ namespace SampleAPI.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(450)")
-                        .HasDefaultValue("79bf11cc-bca1-419c-ae5a-401883a34cf9");
+                        .HasDefaultValue("d1bc4770-9e13-4d01-8569-e09ab6643103");
 
                     b.Property<int>("Color")
                         .HasColumnType("int");

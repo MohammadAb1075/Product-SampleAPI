@@ -2,12 +2,12 @@
 {
     public enum ColorEnum
         {
-            Blue,
-            Green,
-            Red,
-            Brown,
-            Yellow,
-            Gray
+            Blue = 1,
+            Green = 2,
+            Red = 3,
+            Brown = 4,
+            Yellow = 5,
+            Gray = 6
         }
 
 }

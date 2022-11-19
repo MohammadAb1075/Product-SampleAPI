@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 
 namespace SampleAPI.Models.Config
@@ -8,16 +9,17 @@ namespace SampleAPI.Models.Config
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-
             builder
                 .HasKey(e => e.Id)
                 .HasName("PK_Product");
-            builder.Property(x => x.Id)
-                .HasDefaultValue(Guid.NewGuid());
+            builder.Property(x => x.Id)              
+                .IsUnicode()
+                .HasDefaultValue(Guid.NewGuid().ToString());
             builder.Property(x => x.Title)
                 .IsRequired();
             builder.Property(x => x.Type)
-                .IsRequired();
+                .IsRequired()
+            ;
             builder.Property(x => x.Price)
                 .IsRequired();
             builder.Property(x => x.Color)
