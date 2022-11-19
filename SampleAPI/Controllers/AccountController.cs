@@ -2,16 +2,17 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using SampleAPI.Data;
 using SampleAPI.Entities;
 using SampleAPI.Models;
 using SampleAPI.Utils;
 using System;
-using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SampleAPI.Controllers
@@ -24,10 +25,20 @@ namespace SampleAPI.Controllers
 
         private AppDbContext db;
 
-        public AccountController()
+        public IConfiguration _configuration;
+
+        public IConfiguration Configuration { get; }
+
+        //public AccountController()
+        //{
+        //    db = new AppDbContext();
+        //}
+        public AccountController(IConfiguration configuration, AppDbContext adc)
         {
-            db = new AppDbContext();
+            db = adc;
+            _configuration = configuration;
         }
+
 
         [HttpPost("SignUp/")]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -50,6 +61,7 @@ namespace SampleAPI.Controllers
 
             var user = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 Username = model.Username,
                 Password = Crypto.ToSHA512(model.Password + salt),
                 Salt = salt
@@ -86,28 +98,61 @@ namespace SampleAPI.Controllers
                 return Unauthorized("Username or password is not correct");
             }
 
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, model.Username)
-                };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
 
+            //IConfigurationRoot configuration = new ConfigurationBuilder()
+            //                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            //                    .AddJsonFile("appsettings.json")
+            //                    .Build();
+
+            //var secretKey = configuration.GetValue<string>("TokenKey");
+            //var tokenTimeOut = configuration.GetValue<int>("TokenTimeOut");
+
+            //// Authentication successful generate JWT token
+            //var tokenHandler = new JwtSecurityTokenHandler();
+            //var key = Encoding.UTF8.GetBytes(secretKey);
+            //var tokenDescriptor = new SecurityTokenDescriptor
+            //{
+            //    Subject = new ClaimsIdentity(new Claim[]
+            //    {
+            //        new Claim(ClaimTypes.Name, user.Username),
+            //        new Claim("Id", user.Id.ToString())
+            //    }),
+            //    Expires = DateTime.UtcNow.AddMinutes(tokenTimeOut),
+            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            //};
+
+            //var securityToken = tokenHandler.CreateToken(tokenDescriptor);
+            //var token = tokenHandler.WriteToken(securityToken);
+
+            //var Amodel = new AuthenticateViewModel
+            //{
+            //    RefreshToken = "",
+            //    Token = token
+            //};
+
+            //return Ok(Amodel);
 
 
-            var authProperties = new AuthenticationProperties
-            {
-                //AlowRefresh = <bool> => Refreshing the authentication session should be allowed.
-                //RedirectUri = <string>
-                //IssuedUTC = <DateTimeOffset >
-                //ExpiresUtc = <DateTimeOffset.UTCNow.AddMinutes(10)>
-            };
 
+            var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("UserId", user.Id.ToString()),
+                        new Claim("Username", user.Username),
+                    };
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claims,
+                expires: DateTime.UtcNow.AddMinutes(10),
+                signingCredentials: signIn);
 
-            return Ok();
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
 
@@ -115,10 +160,10 @@ namespace SampleAPI.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("ActionMethodName");
             return Ok();
         }
-
-
 
     }
 }
