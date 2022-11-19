@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using SampleAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using SampleAPI.Entities;
 using SampleAPI.Models;
 using SampleAPI.Services;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 namespace SampleAPI.Controllers
@@ -91,7 +88,8 @@ namespace SampleAPI.Controllers
                 return BadRequest("Model Is Not Valid");
             }
             await db.CreateAsync<Product>(new Product {Title = model.Title, Price = model.Price, Color = model.Color, Type = model.Type});
-            return Ok();
+            //return Ok();
+            return Created("", model);
         }
 
         //[HttpPut()]
