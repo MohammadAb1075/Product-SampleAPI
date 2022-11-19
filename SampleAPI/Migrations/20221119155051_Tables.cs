@@ -1,21 +1,25 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SampleAPI.Migrations
 {
-    public partial class addUser : Migration
+    public partial class Tables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<Guid>(
-                name: "Id",
-                table: "Products",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("dee1f869-da00-468f-821a-617590d828d7"),
-                oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier",
-                oldDefaultValue: new Guid("672f71af-e8d2-4613-b72f-43af1f2793d6"));
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NewId()"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Color = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Product", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Users",
@@ -36,17 +40,10 @@ namespace SampleAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Products");
 
-            migrationBuilder.AlterColumn<Guid>(
-                name: "Id",
-                table: "Products",
-                type: "uniqueidentifier",
-                nullable: false,
-                defaultValue: new Guid("672f71af-e8d2-4613-b72f-43af1f2793d6"),
-                oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier",
-                oldDefaultValue: new Guid("dee1f869-da00-468f-821a-617590d828d7"));
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

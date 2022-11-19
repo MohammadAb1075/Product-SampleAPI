@@ -2,11 +2,14 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SampleAPI.Models
 {
     public class Product
     {
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Title { get; set; }
 

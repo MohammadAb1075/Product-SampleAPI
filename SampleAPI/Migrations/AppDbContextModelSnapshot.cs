@@ -24,7 +24,7 @@ namespace SampleAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(450)")
-                        .HasDefaultValue("79bf11cc-bca1-419c-ae5a-401883a34cf9");
+                        .HasDefaultValueSql("NewId()");
 
                     b.Property<int>("Color")
                         .HasColumnType("int");

@@ -12,9 +12,11 @@ namespace SampleAPI.Models.Config
             builder
                 .HasKey(e => e.Id)
                 .HasName("PK_Product");
-            builder.Property(x => x.Id)              
+            builder.Property(x => x.Id)
+                .IsRequired()
                 .IsUnicode()
-                .HasDefaultValue(Guid.NewGuid().ToString());
+                .HasDefaultValueSql("NewId()");
+                //.HasDefaultValue(Guid.NewGuid().ToString());
             builder.Property(x => x.Title)
                 .IsRequired();
             builder.Property(x => x.Type)
